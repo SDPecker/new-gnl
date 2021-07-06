@@ -2,21 +2,24 @@
 
 int		get_next_line(int fd, char **line)
 {
-	static char	*buf;
-	static int	result;
-	size_t		reader;
+	static char	*buf = (char *)malloc(BUFFER_SIZE + 1);
+	static int	reader = read(fd, buf, BUFFER_SIZE);
 
-	//free(&line);
-	result = 2;
-	buf = (char *)malloc(BUFFER_SIZE + 1);
-	reader = read(fd, buf, BUFFER_SIZE);
-	if (result > 1)
+	line = join(&line, buf);
+	if (ft_strchr(buf, '\n') != 0)
 	{
-		while (!ft_strchr(buf, '\n') && reader < BUFFER_SIZE)
-		{
-			ft_strlcat(&line, buf, BUFFER_SIZE);
-			reader = read(fd, buf, BUFFER_SIZE);
-		}
-		
+		buf = ft_strchr(buf, '\n') + 1;
+		return (1);
 	}
+	while (reader == BUFFER_SIZE)
+	{
+		reader = read(fd, buf, BUFFER_SIZE);
+		line = join(&line, buf);
+		if (ft_strchr(buf, '\n') != 0)
+		{
+			buf = ft_strchr(buf, '\n') + 1;
+			return (1);
+		}
+	}
+	return (0);
 }

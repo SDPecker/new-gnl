@@ -5,10 +5,11 @@ size_t	ft_strlen(const char *s)
 	size_t	i;
 
 	i = 0;
-	while (s[i])
+	while (s[i] && s[i] != '\n')
 		i++;
 	return (i);
 }
+
 
 char	*ft_strchr(const char *s, char c)
 {
@@ -26,42 +27,41 @@ char	*ft_strchr(const char *s, char c)
 	return (NULL);
 }
 
-void	*ft_strdup(const char *s)
+void	*ft_memmove(void *dst, const void *src, size_t len)
 {
-	char	*res;
-	size_t	i;
+	size_t			i;
+	unsigned char	*p;
+	unsigned char	*r;
 
-	res = (char *)malloc(ft_strlen(s) + 1);
-	if (!res)
-		return (NULL);
 	i = 0;
-	while (s[i])
+	r = (unsigned char *)dst;
+	p = (unsigned char *)src;
+	if (r > p)
 	{
-		res[i] = s[i];
-		i++;
-	}
-	res[i] = 0;
-	return (res);
-}
-
-size_t	ft_strlcat(char *dst, const char *src, size_t size)
-{
-	size_t	i;
-	size_t	j;
-	size_t	r;
-
-	i = ft_strlen(dst);
-	j = 0;
-	r = ft_strlen(src);
-	if (size < i)
-	{
-		r += size;
-		return (r);
+		while (len > 0)
+		{
+			r[len - 1] = p[len - 1];
+			len--;
+		}
 	}
 	else
-		r += i;
-	while (i + 1 < size && src[j])
-		dst[i++] = src[j++];
-	dst[i] = 0;
+	{
+		while (i < len)
+		{
+			r[i] = p[i];
+			i++;
+		}
+	}
+	return (dst);
+}
+
+char	*join(char *line, char *buf)
+{
+	char	*r;
+
+	r = (char *)malloc(ft_strlen(line) + ft_strlen(buf) + 1);
+	ft_memmove(r, line, ft_strlen(line));
+	ft_memmove(r + ft_strlen(line), buf, ft_strlen(buf));
+	r[ft_strlen(line) + ft_strlen(buf)] = 0;
 	return (r);
 }
