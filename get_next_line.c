@@ -2,29 +2,28 @@
 
 int		get_next_line(int fd)
 {
-	static char	*buf = (char *)malloc(BUFFER_SIZE + 1);
-	static int	reader = read(fd, buf, BUFFER_SIZE);
-	int			res;
+	static char	*buf = 0;
+	static int	reader = -2;
 
-	res = -1;
-
-	print_to_nl(buf);
-	if (ft_strchr(buf, '\n') != 0)
+	if (reader == -2)
 	{
-		buf = ft_strchr(buf, '\n') + 1;
-		res = 1;
+		buf = (char *)malloc(BUFFER_SIZE + 1);
+		reader = read(fd, buf, BUFFER_SIZE);
+		write(1, buf, ft_strlen(buf));
 	}
-	while (reader == BUFFER_SIZE && res < 0)
+	if (reader < BUFFER_SIZE)
+		return (0);
+	while (reader == BUFFER_SIZE)
 	{
 		reader = read(fd, buf, BUFFER_SIZE);
-		print_to_nl(buf);
+		write(1, buf, ft_strlen(buf));
 		if (ft_strchr(buf, '\n') != 0)
 		{
 			buf = ft_strchr(buf, '\n') + 1;
-			res = 1;
+			write(1, "\n", 1);
+			return (1);
 		}
 	}
 	if (reader < BUFFER_SIZE)
-		res = 0;
-	return (res);
+		return (0);
 }

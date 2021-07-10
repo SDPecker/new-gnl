@@ -25,12 +25,3 @@ char	*ft_strchr(const char *s, char c)
 	}
 	return (NULL);
 }
-
-void	print_to_nl(char *line)
-{
-	int	i;
-	i = 0;
-
-	while (line[i] && line[i] != 'n')
-		write(1, line[i++], 1);
-}

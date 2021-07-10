@@ -1,0 +1,8 @@
+this is a long string that takes several buffers to read
+here is a shorter string
+so that it takes one buffers
+multi
+string
+buffer
+
+empty string
